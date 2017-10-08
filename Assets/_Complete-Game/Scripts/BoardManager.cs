@@ -6,7 +6,7 @@ using Random = UnityEngine.Random; 		//Tells Random to use the Unity Engine rand
 namespace Completed
 	
 {
-	
+	//GameManager
 	public class BoardManager : MonoBehaviour
 	{
 		// Using Serializable allows us to embed a class with sub properties in the inspector.

@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 
 namespace Completed
 {
-	//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
+    //Player
+	//MovingObjectからの継承
 	public class Player : MovingObject
 	{
-		public float restartLevelDelay = 1f;		//Delay time in seconds to restart level.
-		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
-		public int pointsPerSoda = 20;				//Number of points to add to player food points when picking up a soda object.
+		public float restartLevelDelay = 1f;		//Levelごとの再開の遅延時間
+		public int pointsPerFood = 10;				//Foodから得るポイント
+		public int pointsPerSoda = 20;				//Sodaから得るポイント
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
 		public Text foodText;						//UI Text to display current player food total.
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.

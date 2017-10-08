@@ -7,6 +7,7 @@ namespace Completed
 	using System.Collections.Generic;		//Allows us to use Lists. 
 	using UnityEngine.UI;					//Allows us to use UI.
 	
+    //GameManager
 	public class GameManager : MonoBehaviour
 	{
 		public float levelStartDelay = 2f;						//Time to wait before starting level, in seconds.

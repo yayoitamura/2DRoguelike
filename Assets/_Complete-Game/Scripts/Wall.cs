@@ -3,39 +3,38 @@ using System.Collections;
 
 namespace Completed
 {
+    //Wall
 	public class Wall : MonoBehaviour
 	{
-		public AudioClip chopSound1;				//1 of 2 audio clips that play when the wall is attacked by the player.
-		public AudioClip chopSound2;				//2 of 2 audio clips that play when the wall is attacked by the player.
-		public Sprite dmgSprite;					//Alternate sprite to display after Wall has been attacked by player.
-		public int hp = 3;							//hit points for the wall.
+		public AudioClip chopSound1;				//壁がPlayeに攻撃された時のオーディオクリッップ１
+		public AudioClip chopSound2;                //壁がPlayeに攻撃された時のオーディオクリッップ２
+		public Sprite dmgSprite;					//Awall破壊された時の差し換え用スプライト
+		public int hp = 3;							//wallのhp
 		
-		
-		private SpriteRenderer spriteRenderer;		//Store a component reference to the attached SpriteRenderer.
-		
-		
+		private SpriteRenderer spriteRenderer;      //Store a component reference to the attached SpriteRenderer.
+													//付属のSpriteRendererにコンポーネント参照を格納します。 ?
+
 		void Awake ()
 		{
-			//Get a component reference to the SpriteRenderer.
+			//SpriteRendererへのコンポーネント参照を取得します。
 			spriteRenderer = GetComponent<SpriteRenderer> ();
 		}
-		
-		
-		//DamageWall is called when the player attacks a wall.
+
+
+		//Playerがwallを攻撃した時　Player.OnCantMove で呼ばれる
 		public void DamageWall (int loss)
 		{
-			//Call the RandomizeSfx function of SoundManager to play one of two chop sounds.
+			//SoundManagerのRandomizeSfx関数に二つのオーディオを渡す
 			SoundManager.instance.RandomizeSfx (chopSound1, chopSound2);
-			
-			//Set spriteRenderer to the damaged wall sprite.
+
+			//スプライトレンダラーを破損したウォールスプライトに設定します。
 			spriteRenderer.sprite = dmgSprite;
-			
-			//Subtract loss from hit point total.
+
 			hp -= loss;
 			
-			//If hit points are less than or equal to zero:
+			//hpが0以下
 			if(hp <= 0)
-				//Disable the gameObject.
+                //SetActive(false)でgameObjectを無効(非アクティブ)
 				gameObject.SetActive (false);
 		}
 	}
