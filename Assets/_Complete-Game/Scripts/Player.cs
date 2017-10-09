@@ -12,30 +12,31 @@ namespace Completed
 		public float restartLevelDelay = 1f;		//Levelごとの再開の遅延時間
 		public int pointsPerFood = 10;				//Foodから得るポイント
 		public int pointsPerSoda = 20;				//Sodaから得るポイント
-		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
+		public int wallDamage = 1;                  //How much damage a player does to a wall when chopping it.それをチョッピングするときにプレイヤーが壁に与えるダメージ。
 		public Text foodText;						//UI Text to display current player food total.
-		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
-		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
-		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
-		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
-		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
-		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
+		public AudioClip moveSound1;				//Playerが動く時のAudio clips１
+		public AudioClip moveSound2;				//Playerが動く時のAudio clips２
+		public AudioClip eatSound1;					//food収集時のAudio clips１
+		public AudioClip eatSound2;                 //food収集時のAudio clips２
+		public AudioClip drinkSound1;               //soda収集時のAudio clips１
+		public AudioClip drinkSound2;               //soda収集時のAudio clips２
 		public AudioClip gameOverSound;				//Audio clip to play when player dies.
 		
-		private Animator animator;					//Used to store a reference to the Player's animator component.
-		private int food;                           //Used to store player food points total during level.
+		private Animator animator;					//animator componentを取得
+		private int food;                           //foodの合計point
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
+        //プライベートVector2 touchOrigin = -Vector2.one; //モバイルコントロールのスクリーンタッチ原点の場所を格納するために使用されます。
 #endif
-		
-		
-		//Start overrides the Start function of MovingObject
+
+
+		//MovingObjectにオーバーライドする
 		protected override void Start ()
 		{
-			//Get a component reference to the Player's animator component
+			//animatorの取得
 			animator = GetComponent<Animator>();
-			
-			//Get the current food point total stored in GameManager.instance between levels.
+
+			//Get the current food point total stored in GameManager.instance between levels.レベル間でGameManager.instanceに保存されている現在の食品ポイント合計を取得します。
 			food = GameManager.instance.playerFoodPoints;
 			
 			//Set the foodText to reflect the current player food total.
