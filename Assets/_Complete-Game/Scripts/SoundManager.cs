@@ -19,7 +19,7 @@ namespace Completed
 			if (instance == null)
 				//instanceにSooundManager自身の代入
 				instance = this;
-            // != nul(instanceがある場合)
+            // != this(instanceがある場合)
 			else if (instance != this)
 				//Destroy this, this enforces our singleton pattern so there can only be one instance of SoundManager.
                 //これを破棄すると、シングルトンパターンが適用されるため、SoundManagerのインスタンスは1つしか存在しません。

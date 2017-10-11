@@ -12,50 +12,50 @@ namespace Completed
 	{
 		public float levelStartDelay = 2f;                      //レベル開始前の待機時間
 		public float turnDelay = 0.1f;                          //Delay between each Player turn.各プレイヤーのターンの間のディレイ。
-		public int playerFoodPoints = 100;                      //プレーヤのゲーム開始時のfood points
+		public int playerFoodPoints = 5;                      //プレーヤのゲーム開始時のfood points
 		public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.他のスクリプトがアクセスできるようにするGameManagerの静的インスタンス。
 																//他のスクリプトがアクセスできるようにするGameManagerの静的インスタンス。
 		[HideInInspector] public bool playersTurn = true;		//Boolean to check if it's players turn, hidden in inspector but public.
                                                                 //ブール値で、プレイヤーが回っているか、インスペクターではなくパブリックになっているかを調べます。
 		
 		
-		private Text levelText;                                 //Text to display current level number.現在のレベル番号を表示するテキスト。
+		private Text levelText;                                 //.現在のレベル番号を表示するテキスト。
 		private GameObject levelImage;                          //Image to block out level as levels are being set up, background for levelText.レベルが設定されているのでレベルをブロックする画像、levelTextの背景。
 		private BoardManager boardScript;                       //Store a reference to our BoardManager which will set up the level.レベルを設定するBoardManagerへの参照を保存する
-		private int level = 1;                                  //Current level number, expressed in game as "Day 1".現在のレベル番号。ゲームでは「1日目」と表現されます。
+		private int level = 1;                                  //現在のレベル番号　ゲーム中では「Day ○」
 		private List<Enemy> enemies;                            //List of all Enemy units, used to issue them move commands.移動コマンドを発行するために使用されるすべての敵ユニットのリスト。
-		private bool enemiesMoving;                             //Boolean to check if enemies are moving.敵が動いているかどうかを調べるブール値。
+		private bool enemiesMoving;                             //敵が動いているかどうか
 		private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
 																//ボードをセットアップしているかどうかを確認するブール値。セットアップ中にPlayerが移動しないようにします。
 
 
 
-		//Awake is always called before any Start functions   Awakeは常にStart関数の前に呼び出されます
+		//
 		void Awake()
 		{
-			//Check if instance already exists インスタンスがすでに存在するかどうかを確認する
+			//instanceの有無
 			if (instance == null)
 
-				//if not, set instance to this そうでない場合は、instanceをthisに設定します。
+				//instanceをthisに設定
 				instance = this;
 
-			//If instance already exists and it's not this: インスタンスが既に存在し、それがこれでない場合：
+			//thisでないinstanceがある場合
 			else if (instance != this)
 
                 //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
                 //その後これを破壊する。 これにより、シングルトンのパターンが強制されます。つまり、GameManagerのインスタンスは1つしか存在できません。
                 Destroy(gameObject);
 
-			//Sets this to not be destroyed when reloading scene シーンをリロードするときに破棄しないように設定します
+			//scene切り替え時にobjectが破棄されない(シーンが切り替わっても設定が継続）
 			DontDestroyOnLoad(gameObject);
 
 			//Assign enemies to a new List of Enemy objects. 敵を新しい敵のリストオブジェクトに割り当てます。
 			enemies = new List<Enemy>();
 
-			//Get a component reference to the attached BoardManager script 付属のBoardManagerスクリプトへのコンポーネント参照を取得する
+			//BoardManagerスクリプトへのコンポーネント参照を取得
 			boardScript = GetComponent<BoardManager>();
 
-			//Call the InitGame function to initialize the first level   InitGame関数を呼び出して最初のレベルを初期化する
+			//InitGame関数を呼び出して最初のレベルを初期化する
 			InitGame();
 		}
 
@@ -72,7 +72,7 @@ namespace Completed
 		//This is called each time a scene is loaded. これはシーンがロードされるたびに呼び出されます。
 		static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            instance.level++;
+            instance.level++; 
             instance.InitGame();
         }
 
@@ -81,27 +81,30 @@ namespace Completed
 		void InitGame()
 		{
 			//While doingSetup is true the player can't move, prevent player from moving while title card is up.
+            //プレイ中にSETUPを実行することはできませんが、タイトルカードがアップしている間はプレイヤーが移動するのを防ぎます。
 			doingSetup = true;
-			
-			//Get a reference to our image LevelImage by finding it by name.
+
+			//Get a reference to our image LevelImage by finding it by name.私たちの画像LevelImageへの参照を名前で見つけてください。
 			levelImage = GameObject.Find("LevelImage");
 			
 			//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
+            //LevelTextのテキストコンポーネントへの参照を、名前で検索してGetComponentを呼び出すことで取得します。
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
 			
 			//Set the text of levelText to the string "Day" and append the current level number.
+            //levelTextのテキストを文字列「Day」に設定し、現在のレベル番号を追加します。
 			levelText.text = "Day " + level;
-			
-			//Set levelImage to active blocking player's view of the game board during setup.
+
+			//Set levelImage to active blocking player's view of the game board during setup.セットアップ中にlevelImageをゲームボードのアクティブブロッキングプレーヤーのビューに設定します。
 			levelImage.SetActive(true);
 			
-			//Call the HideLevelImage function with a delay in seconds of levelStartDelay.
+			//levelStartDelay秒後に HideLevelImage関数を呼ぶ
 			Invoke("HideLevelImage", levelStartDelay);
-			
-			//Clear any Enemy objects in our List to prepare for next level.
+
+			//Clear any Enemy objects in our List to prepare for next level.私たちのリストの敵のオブジェクトをクリアして次のレベルに備える。
 			enemies.Clear();
-			
-			//Call the SetupScene function of the BoardManager script, pass it current level number.
+
+			//BoardManagerスクリプトのSetupScene関数を呼び出し、現在のレベル番号を渡します。
 			boardScript.SetupScene(level);
 			
 		}
@@ -110,20 +113,20 @@ namespace Completed
 		//Hides black image used between levels レベル間で使用される黒い画像を非表示にする
 		void HideLevelImage()
 		{
-			//Disable the levelImage gameObject.
+			// 黒の背景画像gameObjectを無効にする。
 			levelImage.SetActive(false);
-			
-			//Set doingSetup to false allowing player to move again.
+
+			//doingSetupをfalseに設定すると、プレイヤーは再び移動できます。
 			doingSetup = false;
 		}
 
 		//Update is called every frame. 更新はすべてのフレームと呼ばれます。
 		void Update()
 		{
-			//Check that playersTurn or enemiesMoving or doingSetup are not currently true.
+			//Check that playersTurn or enemiesMoving or doingSetup are not currently true.プレイヤーがターンまたは敵であることを確認してください。
 			if(playersTurn || enemiesMoving || doingSetup)
-				
-				//If any of these are true, return and do not start MoveEnemies.
+
+				//If any of these are true, return and do not start MoveEnemies.これらのいずれかが当てはまる場合、戻って、MoveEnemiesを開始しないでください。
 				return;
 			
 			//Start moving enemies.
@@ -134,53 +137,55 @@ namespace Completed
         //これを呼び出して、渡された敵を敵のリストオブジェクトに追加します。
 		public void AddEnemyToList(Enemy script)
 		{
-			//Add Enemy to List enemies.
+			//Add Enemy to List enemies.敵をリストに追加する。
 			enemies.Add(script);
 		}
 
 
-		//GameOver is called when the player reaches 0 food points   GameOverは、プレイヤーが0点の食べ物ポイントに達すると呼び出されます
+		//foodpointが0になるとPlayerのCheckIfGameOverで呼ばれる
 		public void GameOver()
 		{
-			//Set levelText to display number of levels passed and game over message
-			levelText.text = "After " + level + " days, you starved.";
-			
-			//Enable black background image gameObject.
+			//GameOver時のMessage
+			levelText.text = "Game Over " + level + " days";
+
+			//黒の背景画像gameObjectを有効にする。
 			levelImage.SetActive(true);
-			
-			//Disable this GameManager.
+
+			//Disable this GameManager.このGameManagerを無効にする
 			enabled = false;
 		}
 
 		//Coroutine to move enemies in sequence. コルーチンは順番に敵を動かす。
 		IEnumerator MoveEnemies()
 		{
-			//While enemiesMoving is true player is unable to move.
+			//While enemiesMoving is true player is unable to move. enemiesMovingが真のプレイヤーは移動できませんが、移動することはできません。
 			enemiesMoving = true;
-			
-			//Wait for turnDelay seconds, defaults to .1 (100 ms).
+
+			//Wait for turnDelay seconds, defaults to .1 (100 ms). turnDelay秒待機します。デフォルトは0.1（100 ms）です。
 			yield return new WaitForSeconds(turnDelay);
-			
-			//If there are no enemies spawned (IE in first level):
+
+			//If there are no enemies spawned (IE in first level): 敵が生まれていない場合（第1レベルのIE）：
 			if (enemies.Count == 0) 
 			{
 				//Wait for turnDelay seconds between moves, replaces delay caused by enemies moving when there are none.
+                //移動間のターン遅延秒間待機し、敵が移動していない場合に移動する遅延を置き換えます。
 				yield return new WaitForSeconds(turnDelay);
 			}
-			
-			//Loop through List of Enemy objects.
+
+			//Loop through List of Enemy objects. Enemyオブジェクトのリストをループします。
 			for (int i = 0; i < enemies.Count; i++)
 			{
 				//Call the MoveEnemy function of Enemy at index i in the enemies List.
+                //敵リストのインデックスiの敵のMoveEnemy関数を呼び出します。
 				enemies[i].MoveEnemy ();
-				
-				//Wait for Enemy's moveTime before moving next Enemy, 
+
+				//Wait for Enemy's moveTime before moving next Enemy,  次の敵に移動する前に敵のmoveTimeを待ちます。
 				yield return new WaitForSeconds(enemies[i].moveTime);
 			}
-			//Once Enemies are done moving, set playersTurn to true so player can move.
+			//Once Enemies are done moving, set playersTurn to true so player can move. 敵が移動したら、playersTurnをtrueに設定してプレーヤーが移動できるようにします。
 			playersTurn = true;
-			
-			//Enemies are done moving, set enemiesMoving to false.
+
+			//Enemies are done moving, set enemiesMoving to false. 敵は動かされ、敵は偽に変わる。
 			enemiesMoving = false;
 		}
 	}
