@@ -61,7 +61,9 @@ namespace Completed
 
         //this is called only once, and the paramter tell it to be called only after the scene was loaded
         //(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
-        //これは一度だけ呼び出され、シーンがロードされた後に呼び出されるようにパラメータに指示します（そうでなければ、シーンロードコールバックは最初のロードと呼ばれ、
+        //これは一度だけ呼び出され、パラメータはシーンのロード後に呼び出されるように指示します
+        //（そうでなければ、私たちのScene Loadコールバックは最初のロードと呼ばれ、私たちはそれを望んでいません）
+        //Startの前で自動的に呼ばれる
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static public void CallbackInitialization()
         {

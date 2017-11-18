@@ -24,17 +24,18 @@ namespace Completed
 				maximum = max;
 			}
 		}
-		
-		
-		public int columns = 8;                                         //Number of columns in our game board. ゲームボードの列数
-		public int rows = 8;                                            //Number of rows in our game board. ゲームボードの行数。
+
+        //public int maxint = 5;
+        //public int minint = 5;
+		public int columns = 8;                                         //ゲームボードの列数
+		public int rows = 8;                                            //の行数。
 		public Count wallCount = new Count (5, 9);                      //Lower and upper limit for our random number of walls per level. 1レベルあたりの乱数の乱数の上限と下限。
 		public Count foodCount = new Count (1, 5);                      //Lower and upper limit for our random number of food items per level. 1レベルあたりの食品の乱数の上限と下限。
 		public GameObject exit;                                         //Prefab to spawn for exit.プレハブを実行して終了します。
-		public GameObject[] floorTiles;                                 //Array of floor prefabs. 床プレハブの配列。
-		public GameObject[] wallTiles;                                  //Array of wall prefabs. 壁プレハブの配列。
-		public GameObject[] foodTiles;                                  //Array of food prefabs. foodプレハブの配列。
-		public GameObject[] enemyTiles;                                 //Array of enemy prefabs. enemyプレハブの配列。
+		public GameObject[] floorTiles;                                 //床プレハブの配列。
+		public GameObject[] wallTiles;                                  //壁プレハブの配列。
+		public GameObject[] foodTiles;                                  //foodプレハブの配列。
+		public GameObject[] enemyTiles;                                 //enemyプレハブの配列。
 		public GameObject[] outerWallTiles;                             //Array of outer tile prefabs. 外側のタイルプレアブの配列。
 
 		private Transform boardHolder;                                  //A variable to store a reference to the transform of our Board object. Boardオブジェクトの変換への参照を格納する変数。
@@ -140,6 +141,9 @@ namespace Completed
 		//GameManeger.InitGame
 		public void SetupScene (int level)
 		{
+            int maxint = new System.Random().Next(1, 3);
+            columns *= maxint;
+
 			//Creates the outer walls and floor.外壁と床を作成します。
 			BoardSetup ();
 			
